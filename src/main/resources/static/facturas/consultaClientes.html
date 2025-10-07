@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Clientes</title>
+    <script src="/vistaWeb.js"></script>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <script src="/utilesVista.js"></script>
+    <div class="container">
+        <div class="menu-back-container">
+            <button onclick="window.location.href='../index.html'" class="menu-back-button">
+                ← Volver al Menú
+            </button>
+        </div>
+        <h1>Consulta de Clientes</h1>
+        <p class="info-section">
+            Producto más barato y clientes que lo compraron
+        </p>
+
+        <!-- Información del producto más barato -->
+        <div id="productoBarato" class="producto-barato" style="display: none;">
+            <h3>Producto Más Barato</h3>
+            <div class="producto-info">
+                <strong>Código:</strong> <span id="codigoProducto">-</span><br>
+                <strong>Nombre:</strong> <span id="nombreProducto">-</span><br>
+                <strong>Precio:</strong> $<span id="precioProducto">-</span><br>
+                <strong>Stock:</strong> <span id="stockProducto">-</span>
+            </div>
+        </div>
+
+        <!-- Tabla de clientes que compraron el producto -->
+        <div id="seccionClientes" style="display: none;">
+            <h3>Clientes que compraron este producto</h3>
+            <div id="tablaClientes"></div>
+        </div>
+
+        <!-- Mensaje informativo -->
+        <div id="mensajeInfo" class="mensaje-info" style="display: none;">
+            <p id="textoMensaje">No hay clientes que hayan comprado el producto.</p>
+        </div>
+    </div>
+
+    <script>
+        urlIniciarVista = "/consultaPmb/vistaConectada";
+        
+        const productoBarato = document.getElementById('productoBarato');
+        const codigoProductoSpan = document.getElementById('codigoProducto');
+        const nombreProductoSpan = document.getElementById('nombreProducto');
+        const precioProductoSpan = document.getElementById('precioProducto');
+        const stockProductoSpan = document.getElementById('stockProducto');
+        const seccionClientes = document.getElementById('seccionClientes');
+        const tablaClientes = document.getElementById('tablaClientes');
+        const mensajeInfo = document.getElementById('mensajeInfo');
+        const textoMensaje = document.getElementById('textoMensaje');
+
+        function mostrar_producto(producto) {
+            if (producto) {
+                // Mostrar información del producto más barato
+                productoBarato.style.display = 'block';
+                codigoProductoSpan.textContent = producto.codigo;
+                nombreProductoSpan.textContent = producto.nombre;
+                precioProductoSpan.textContent = producto.precio;
+                stockProductoSpan.textContent = producto.unidades;
+                
+                // Ocultar mensaje si está visible
+                mensajeInfo.style.display = 'none';
+            }
+        }
+
+        function mostrar_clientes(clientes) {
+            if (clientes && clientes.length > 0) {
+                // Mostrar tabla de clientes
+                seccionClientes.style.display = 'block';
+                tablaClientes.innerHTML = crearTablaDesdeJson(clientes);
+                
+                // Ocultar mensaje si está visible
+                mensajeInfo.style.display = 'none';
+            } else {
+                // No hay clientes, mostrar mensaje informativo
+                mostrar_mensaje("No hay clientes que hayan comprado el producto.");
+            }
+        }
+
+        function mostrar_mensaje(mensaje) {
+            // Mostrar mensaje informativo
+            mensajeInfo.style.display = 'block';
+            textoMensaje.textContent = mensaje;
+            
+            // Si es un mensaje de error, ocultar otras secciones
+            if (mensaje === "No hay productos ingresados.") {
+                productoBarato.style.display = 'none';
+                seccionClientes.style.display = 'none';
+            } else if (mensaje === "No hay clientes que hayan comprado el producto.") {
+                seccionClientes.style.display = 'none';
+            }
+        }
+
+        // Función adicional para manejar mensajes con mostrarMensaje de utilesVista.js
+        async function mostrarMensajeModal(mensaje) {
+            await mostrarMensaje(mensaje);
+        }
+    </script>
+</body>
+</html>

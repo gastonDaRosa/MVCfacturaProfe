@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión - Menú Principal</title>
+    <link rel="stylesheet" href="facturas/base.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Gestión</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Seleccione una opción del menú
+        </p>
+        
+        <div class="menu-container">
+            <div class="menu-item">
+                <h3>Gestión de Clientes</h3>
+                <p>Administrar información de clientes del sistema</p>
+                <button onclick="window.location.href='facturas/clientes.html'" class="menu-button">
+                    Acceder a Clientes
+                </button>
+            </div>
+
+            <div class="menu-item">
+                <h3>Consulta de Clientes</h3>
+                <p>Ver clientes que compraron el producto más barato</p>
+                <button onclick="window.location.href='facturas/consultaClientes.html'" class="menu-button">
+                    Ver Consulta
+                </button>
+            </div>
+            
+            <div class="menu-item">
+                <h3>Gestión de Productos</h3>
+                <p>Administrar catálogo de productos y stock</p>
+                <button onclick="window.location.href='facturas/productos.html'" class="menu-button">
+                    Acceder a Productos
+                </button>
+            </div>
+            
+            <div class="menu-item">
+                <h3>Gestión de Facturas</h3>
+                <p>Crear y administrar facturas de venta</p>
+                <button onclick="window.location.href='facturas/gestionFacturas.html'" class="menu-button">
+                    Acceder a Facturas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .menu-item {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover:not([style*="opacity"]) {
+            background-color: #f0f0f0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .menu-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.2rem;
+        }
+        
+        .menu-item p {
+            margin: 0 0 15px 0;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .menu-button {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: none;
+            background-color: #0057b8;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .menu-button:hover:not(:disabled) {
+            background-color: #004799;
+        }
+        
+        .menu-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</body>
+</html>

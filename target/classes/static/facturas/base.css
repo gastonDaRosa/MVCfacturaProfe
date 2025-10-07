@@ -1,0 +1,261 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 4 jun. 2025, 11:59:06
+    Author     : PC
+*/
+
+/* Estilo sobrio y moderno */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"]{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    background-color: #0057b8;
+    color: white;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    background-color: #004799;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+th {
+    background-color: #f1f1f1;
+    font-weight: 600;
+    user-select: none;
+}
+
+tbody tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: border-color 0.3s ease;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+select:focus {
+    border-color: #0057b8;
+    box-shadow: 0 0 5px rgba(0, 87, 184, 0.5);
+}
+
+select:disabled {
+    background-color: #eee;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Estilos para navegación y botones de menú */
+.menu-back-container {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.menu-back-button {
+    background-color: #6c757d;
+    font-size: 0.9rem;
+    padding: 8px 15px;
+}
+
+.menu-back-button:hover {
+    background-color: #5a6268;
+}
+
+/* Estilos para secciones informativas */
+.info-section {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.total-facturado {
+    background-color: #e8f5e8;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.total-facturado h3 {
+    margin: 0;
+    color: #2d5a2d;
+}
+
+.producto-barato {
+    background-color: #e8f5e8;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    border-left: 4px solid #28a745;
+}
+
+.producto-barato h3 {
+    margin-top: 0;
+    color: #2d5a2d;
+}
+
+.producto-info {
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+/* Estilos para información de facturas */
+.factura-info {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.factura-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.factura-right {
+    text-align: right;
+}
+
+/* Estilos para mensajes informativos */
+.mensaje-info {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    color: #666;
+}
+
+.mensaje-vacio {
+    text-align: center;
+    color: #666;
+}
+
+/* Estilos para botones de acciones */
+.botones-factura {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-confirmar {
+    background-color: #28a745;
+    margin-right: 10px;
+}
+
+.btn-confirmar:hover {
+    background-color: #218838;
+}
+
+.btn-descartar {
+    background-color: #dc3545;
+}
+
+.btn-descartar:hover {
+    background-color: #c82333;
+}
+
+/* Estilos para tablas mejoradas */
+#tablaClientes table th {
+    background-color: #f1f3f4;
+    font-weight: 600;
+}
+
+#tablaClientes table td {
+    vertical-align: top;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+    .producto-info {
+        font-size: 1rem;
+    }
+    
+    .factura-header {
+        flex-direction: column;
+    }
+    
+    .factura-right {
+        text-align: left;
+        margin-top: 10px;
+    }
+}

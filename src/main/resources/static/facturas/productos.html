@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <script src="/vistaWeb.js"></script>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <script src="/utilesVista.js"></script>
+    <div class="container">
+        <div class="menu-back-container">
+            <button onclick="window.location.href='../index.html'" class="menu-back-button">
+                ← Volver al Menú
+            </button>
+        </div>
+        <h1>Ingreso de Productos</h1>
+
+        <form id="formBuscar" method="POST" action="/ingresarNombre">
+            <div class="form-group">
+                <label for="nombre">Nombre del Producto:</label>
+                <input type="text" id="nombreProducto" name="nombre" required>
+                <button type="submit" id="btnBuscar">Verificar Nombre</button>
+            </div>
+        </form>
+
+        <form id="formGuardar" method="POST" action="/guardarProducto">
+            <div class="form-group">
+                <label for="proveedor">Proveedor:</label>
+                <div id="proveedorContainer">
+                    <select id="proveedor" name="proveedor" disabled>
+                        <option value="-1">Seleccione un proveedor</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="precio" min="0" disabled>
+            </div>
+            <div class="form-group">
+                <label for="unidades">Unidades:</label>
+                <input type="number" id="unidades" name="unidades" min="0" disabled>
+            </div>
+            <button type="submit" id="btnGuardar" disabled>Guardar</button>
+        </form>
+
+        <div id="tablaProductos"></div>
+    </div>
+
+    <script>
+        urlIniciarVista = "/productos/vistaConectada";
+        const formBuscar = document.getElementById('formBuscar');
+        const formGuardar = document.getElementById('formGuardar');
+        const nombreProductoInput = document.getElementById('nombreProducto');
+        let proveedorSelect = document.getElementById('proveedor'); // Usar let para permitir reasignación
+        const precioInput = document.getElementById('precio');
+        const unidadesInput = document.getElementById('unidades');
+        const btnGuardar = document.getElementById('btnGuardar');
+        const tabla = document.getElementById('tablaProductos');
+
+        formBuscar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submit("/productos/ingresarNombre", serializarFormulario('formBuscar'));
+        });
+
+        formGuardar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submit("/productos/guardarProducto", serializarFormulario('formGuardar'));
+        });
+      
+        function mostrar_productos(productos){
+            tabla.innerHTML = crearTablaDesdeJson(productos);
+        }
+        
+        function mostrar_producto(producto){
+            nombreProductoInput.value = producto.nombre;
+            precioInput.value = producto.precio;
+            unidadesInput.value = producto.unidades;
+            // Si existe el producto, mostrar sus datos pero deshabilitar la edición
+            mostrar_habilitarIngreso(false);
+        }
+        
+        function mostrar_proveedores(proveedores){
+            // Usar crearListaDesdeJson para generar el select de proveedores
+            const proveedorContainer = document.getElementById('proveedorContainer');
+            
+            const htmlSelect = crearListaDesdeJson({
+                data: proveedores,
+                campoMostrar: 'nombre',
+                campoValor: null, // Usar el índice como valor
+                multiple: false,
+                mostrarOpcionInicial: true,
+                id: 'proveedor'
+            });
+            
+            proveedorContainer.innerHTML = htmlSelect;
+            
+            // Actualizar la referencia al nuevo select
+            proveedorSelect = document.getElementById('proveedor');
+            
+            if (proveedorSelect) {
+                proveedorSelect.name = 'proveedor'; // Asegurar que mantenga el name
+                // No cambiar el estado disabled aquí - será controlado por mostrar_habilitarIngreso
+            }
+        }
+        
+        function mostrar_habilitarIngreso(habilitar) {
+            if (!habilitar) {
+                // Limpiar campos de entrada cuando se deshabilita
+                precioInput.value = '';
+                unidadesInput.value = '';
+            }
+            
+            // Siempre obtener la referencia más actual del select
+            proveedorSelect = document.getElementById('proveedor');
+            
+            if (proveedorSelect) {
+                proveedorSelect.disabled = !habilitar;
+                if (!habilitar) {
+                    proveedorSelect.value = '-1';
+                }
+            }
+            
+            precioInput.disabled = !habilitar;
+            unidadesInput.disabled = !habilitar;
+            btnGuardar.disabled = !habilitar;
+        }
+        
+        function mostrar_limpiarEntradas(limpiar) {
+            if (limpiar) {
+                nombreProductoInput.value = '';
+                precioInput.value = '';
+                unidadesInput.value = '';
+                
+                // Obtener la referencia actual del select y limpiarlo
+                proveedorSelect = document.getElementById('proveedor');
+                if (proveedorSelect) {
+                    proveedorSelect.value = '-1';
+                }
+            }
+        }
+        
+        async function mostrar_mensaje(mensaje){
+            await mostrarMensaje(mensaje);
+        }
+    </script>
+</body>
+</html>

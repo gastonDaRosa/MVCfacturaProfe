@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Facturas</title>
+    <script src="/vistaWeb.js"></script>
+    <link rel="stylesheet" href="base.css">
+</head>
+<body>
+    <script src="/utilesVista.js"></script>
+    <div class="container">
+        <div class="menu-back-container">
+            <button onclick="window.location.href='../index.html'" class="menu-back-button">
+                ← Volver al Menú
+            </button>
+        </div>
+        <h1>Gestión de Facturas</h1>
+        
+        <!-- Mostrar total facturado -->
+        <div class="total-facturado">
+            <h3>Total Facturado: $<span id="totalFacturado">0</span></h3>
+        </div>
+
+        <!-- Formulario para iniciar factura -->
+        <form id="formIniciarFactura" method="POST" action="/iniciarFactura">
+            <div class="form-group">
+                <label for="cedula">Cédula del Cliente:</label>
+                <input type="number" id="cedula" name="cedula" required>
+                <button type="submit" id="btnIniciarFactura">Iniciar Factura</button>
+            </div>
+        </form>
+
+        <!-- Información de la factura actual -->
+        <div id="infoFactura" class="factura-info" style="display: none;">
+            <h3>Factura en Proceso</h3>
+            <div class="factura-header">
+                <div>
+                    <strong>Cliente:</strong> <span id="nombreCliente">-</span><br>
+                    <strong>Cédula:</strong> <span id="cedulaCliente">-</span>
+                </div>
+                <div class="factura-right">
+                    <strong>Fecha:</strong> <span id="fechaFactura">-</span><br>
+                    <strong>Total:</strong> $<span id="totalFactura">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario para agregar productos -->
+        <form id="formAgregarProducto" method="POST" action="/agregarProducto" style="display: none;">
+            <div class="form-group">
+                <label for="codigoProducto">Código del Producto:</label>
+                <input type="number" id="codigoProducto" name="codigoProducto" required>
+            </div>
+            <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" name="cantidad" min="1" required>
+            </div>
+            <button type="submit" id="btnAgregarProducto">Agregar Producto</button>
+        </form>
+
+        <!-- Tabla de líneas de la factura -->
+        <div id="tablaLineas" style="display: none;">
+            <h3>Productos en la Factura</h3>
+            <div id="lineasFactura"></div>
+        </div>
+
+        <!-- Botones para confirmar o descartar factura -->
+        <div id="botonesFactura" class="botones-factura" style="display: none;">
+            <button id="btnConfirmarFactura" class="btn-confirmar">
+                Confirmar Factura
+            </button>
+            <button id="btnDescartarFactura" class="btn-descartar">
+                Descartar Factura
+            </button>
+        </div>
+    </div>
+
+    <script>
+        urlIniciarVista = "/ingresarFactura/vistaConectada";
+        const formIniciarFactura = document.getElementById('formIniciarFactura');
+        const formAgregarProducto = document.getElementById('formAgregarProducto');
+        const cedulaInput = document.getElementById('cedula');
+        const codigoProductoInput = document.getElementById('codigoProducto');
+        const cantidadInput = document.getElementById('cantidad');
+        const btnIniciarFactura = document.getElementById('btnIniciarFactura');
+        const btnAgregarProducto = document.getElementById('btnAgregarProducto');
+        const btnConfirmarFactura = document.getElementById('btnConfirmarFactura');
+        const btnDescartarFactura = document.getElementById('btnDescartarFactura');
+        
+        const totalFacturadoSpan = document.getElementById('totalFacturado');
+        const infoFactura = document.getElementById('infoFactura');
+        const nombreClienteSpan = document.getElementById('nombreCliente');
+        const cedulaClienteSpan = document.getElementById('cedulaCliente');
+        const fechaFacturaSpan = document.getElementById('fechaFactura');
+        const totalFacturaSpan = document.getElementById('totalFactura');
+        const tablaLineas = document.getElementById('tablaLineas');
+        const lineasFactura = document.getElementById('lineasFactura');
+        const botonesFactura = document.getElementById('botonesFactura');
+
+        formIniciarFactura.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submit("/ingresarFactura/iniciarFactura", serializarFormulario('formIniciarFactura'));
+        });
+
+        formAgregarProducto.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submit("/ingresarFactura/agregarProducto", serializarFormulario('formAgregarProducto'));
+        });
+
+        btnConfirmarFactura.addEventListener('click', function() {
+            submit("/ingresarFactura/confirmarFactura", "");
+        });
+
+        btnDescartarFactura.addEventListener('click', function() {
+            if (confirm("¿Está seguro que desea descartar la factura actual?")) {
+                submit("/ingresarFactura/descartarFactura", "");
+            }
+        });
+
+        function mostrar_totalFacturado(total) {
+            totalFacturadoSpan.textContent = total;
+        }
+
+        function mostrar_factura(factura) {
+            if (factura && factura.cliente) {
+                // Mostrar información de la factura
+                infoFactura.style.display = 'block';
+                formAgregarProducto.style.display = 'block';
+                tablaLineas.style.display = 'block';
+                botonesFactura.style.display = 'block';
+                
+                // Llenar datos de la factura
+                nombreClienteSpan.textContent = factura.cliente;
+                cedulaClienteSpan.textContent = factura.cedula;
+                fechaFacturaSpan.textContent = factura.fecha;
+                totalFacturaSpan.textContent = factura.total;
+                
+                // Mostrar líneas de la factura
+                if (factura.lineas && factura.lineas.length > 0) {
+                    lineasFactura.innerHTML = crearTablaDesdeJson(factura.lineas);
+                } else {
+                    lineasFactura.innerHTML = '<p class="mensaje-vacio">No hay productos en la factura</p>';
+                }
+                
+                // Deshabilitar el formulario de iniciar factura
+                cedulaInput.disabled = true;
+                btnIniciarFactura.disabled = true;
+                
+                // Limpiar formulario de agregar producto
+                codigoProductoInput.value = '';
+                cantidadInput.value = '';
+                
+            } else {
+                // No hay factura - ocultar elementos relacionados
+                infoFactura.style.display = 'none';
+                formAgregarProducto.style.display = 'none';
+                tablaLineas.style.display = 'none';
+                botonesFactura.style.display = 'none';
+                
+                // Habilitar el formulario de iniciar factura
+                cedulaInput.disabled = false;
+                btnIniciarFactura.disabled = false;
+                cedulaInput.value = '';
+            }
+        }
+
+        async function mostrar_mensaje(mensaje) {
+            await mostrarMensaje(mensaje);
+        }
+    </script>
+</body>
+</html>
