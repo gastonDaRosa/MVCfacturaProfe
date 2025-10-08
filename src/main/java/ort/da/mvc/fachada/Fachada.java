@@ -14,9 +14,6 @@ public class Fachada {
 
     private static Fachada instancia;
 
-    private static SistemaClientes sc;
-    private static SistemaFacturas sf;
-    private static SistemaStock ss;
 
     public static Fachada getInstancia(){
         
@@ -27,85 +24,82 @@ public class Fachada {
     }
 
     private Fachada(){
-        sc = SistemaClientes.getInstancia();
-        sf = SistemaFacturas.getInstancia();
-        ss = SistemaStock.getInstancia();
     }
 
     //sistema clientes
     public ArrayList<Cliente> getClientes() {
-        return sc.getClientes();
+        return SistemaClientes.getInstancia().getClientes();
     }
     public ArrayList clientesNoCompraronProductoMenorPrecio(){
-          return sc.clientesNoCompraronProductoMenorPrecio();
+          return SistemaClientes.getInstancia().clientesNoCompraronProductoMenorPrecio();
     }
     public ArrayList clientesCompraronProductoMenorPrecio(){
-       return sc.clientesCompraronProductoMenorPrecio();
+       return SistemaClientes.getInstancia().clientesCompraronProductoMenorPrecio();
     }
 
     public boolean existeCliente(String unaCedula) {
-           return sc.existeCliente(unaCedula);
+           return SistemaClientes.getInstancia().existeCliente(unaCedula);
     }
     public Cliente buscarCliente(String unaCedula) {
-            return sc.buscarCliente(unaCedula);
+            return SistemaClientes.getInstancia().buscarCliente(unaCedula);
     }
      
         
     public boolean agregar(Cliente c){
-        return sc.agregar(c);
+        return SistemaClientes.getInstancia().agregar(c);
     }
 
     
     //sistema facturas
     public ArrayList<Factura> getFacturas() {
-        return sf.getFacturas();
+        return SistemaFacturas.getInstancia().getFacturas();
     }
     public Factura nuevaFactura(String cedula){
-        return sf.nuevaFactura(cedula);
+        return SistemaFacturas.getInstancia().nuevaFactura(cedula);
     }
     
     public boolean agregar(Factura unaFactura){
-        return sf.agregar(unaFactura);
+        return SistemaFacturas.getInstancia().agregar(unaFactura);
     }
     
     public boolean clienteComproProducto(Cliente c, Producto p){
-        return sf.clienteComproProducto(c, p);
+        return SistemaFacturas.getInstancia().clienteComproProducto(c, p);
     }
     public Factura ultimaCompra(Cliente c, Producto p){
-        return sf.ultimaCompra(c, p);
+        return SistemaFacturas.getInstancia().ultimaCompra(c, p);
     }
     public int totalFacturado(){
-        return sf.totalFacturado();
+        return SistemaFacturas.getInstancia().totalFacturado();
     }
 
     
 
     //sistema stock
     public ArrayList<Producto> getProductos() {
-        return ss.getProductos();
+        return SistemaStock.getInstancia().getProductos();
     }
 
     public ArrayList<Proveedor> getProveedores() {
-        return ss.getProveedores();
+        return SistemaStock.getInstancia().getProveedores();
     }
 
     
     public Producto getProductoMenorPrecio(){
-        return ss.getProductoMenorPrecio();  
+        return SistemaStock.getInstancia().getProductoMenorPrecio();  
     }
         
     public void agregar(Proveedor unProveedor){
-        ss.agregar(unProveedor);
+        SistemaStock.getInstancia().agregar(unProveedor);
     }
     
     public  boolean altaProducto(Producto unProducto){
-        return ss.altaProducto(unProducto);
+        return SistemaStock.getInstancia().altaProducto(unProducto);
     }
     public Producto buscarProducto(String nombre){
-        return ss.buscarProducto(nombre);
+        return SistemaStock.getInstancia().buscarProducto(nombre);
     }
     public Producto buscar(int codigo){
-        return ss.buscar(codigo);
+        return SistemaStock.getInstancia().buscar(codigo);
     }
 
     
