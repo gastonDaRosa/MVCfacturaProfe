@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ort.da.mvc.fachada.Fachada;
 import ort.da.mvc.facturas.dto.NombreDto;
 import ort.da.mvc.facturas.dto.ProductoDto;
-import ort.da.mvc.facturas.modelo.Cliente;
-import ort.da.mvc.facturas.servicios.SistemaClientes;
-import ort.da.mvc.facturas.servicios.SistemaStock;
 import ort.da.mvc.facturas.modelo.Producto;
 import ort.da.mvc.facturas.modelo.Proveedor;
 import ort.da.mvc.facturas.modelo.Respuesta;
@@ -47,7 +45,7 @@ public class ControladorProductos {
            producto = null;
            return Respuesta.lista(mensaje("Nombre de producto incorrecto"));
        }
-       Producto tmp = SistemaStock.getInstancia().buscarProducto(nombre);
+       Producto tmp = Fachada.getInstancia().buscarProducto(nombre);
        if(tmp!=null){
            return Respuesta.lista(mensaje("Ya existe el producto"),
                                   producto(tmp));
@@ -65,7 +63,7 @@ public class ControladorProductos {
        }
        producto.setPrecio(precio);
        producto.setUnidades(unidades);
-       if(SistemaStock.getInstancia().altaProducto(producto)){
+       if(Fachada.getInstancia().altaProducto(producto)){
             producto = null;
             return Respuesta.lista(productos(),
                                    new Respuesta("limpiarEntradas",true),
@@ -81,12 +79,12 @@ public class ControladorProductos {
     private Respuesta productos() {
         
         return new Respuesta("productos",
-                      ProductoDto.listaDtos(SistemaStock.getInstancia().getProductos()));
+                      ProductoDto.listaDtos(Fachada.getInstancia().getProductos()));
         
     }
     private Respuesta proveedores() {
         ArrayList<NombreDto> lista = new ArrayList();
-        proveedores = new ArrayList(SistemaStock.getInstancia().getProveedores());
+        proveedores = new ArrayList(Fachada.getInstancia().getProveedores());
         for(Proveedor p: proveedores){
             lista.add(new NombreDto(p.getNombre()));// + " (" + p.getProductos().size() + ")"));
         }

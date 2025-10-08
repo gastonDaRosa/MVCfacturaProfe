@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ort.da.mvc.fachada.Fachada;
 import ort.da.mvc.facturas.dto.ClienteDto;
 import ort.da.mvc.facturas.modelo.Cliente;
 import ort.da.mvc.facturas.modelo.Respuesta;
-import ort.da.mvc.facturas.servicios.SistemaClientes;
 
 /**
  *
@@ -38,19 +38,20 @@ public class ControladorClientes {
        if(!cliente.setCedula(cedula)){
            return Respuesta.lista(mensaje("Cedula incorrecta"));
        }
-       Cliente tmp = SistemaClientes.getInstancia().buscarCliente(cedula);
+       Cliente tmp = Fachada.getInstancia().buscarCliente(cedula);
        if(tmp!=null){
            return Respuesta.lista(mensaje("Ya existe el cliente"),
                                   cliente(tmp));
        }
        return Respuesta.lista(new Respuesta("habilitarIngreso",true));
     }
+
      @PostMapping("/guardarCliente")
     public List<Respuesta> guardarCliente(@RequestParam String nombre,@RequestParam String email) {
         if(cliente == null)  return Respuesta.lista(mensaje("No se ha ingresado una cedula"));
         cliente.setNombre(nombre);
         cliente.setEmail(email);
-        if(SistemaClientes.getInstancia().agregar(cliente)){
+        if(Fachada.getInstancia().agregar(cliente)){
             cliente = null;
             return Respuesta.lista(clientes(),
                                    new Respuesta("limpiarEntradas",true),
@@ -63,7 +64,7 @@ public class ControladorClientes {
     private Respuesta clientes() {
         
         return new Respuesta("clientes",
-                      ClienteDto.listaDtos(SistemaClientes.getInstancia().getClientes()));
+                      ClienteDto.listaDtos(Fachada.getInstancia().getClientes()));
         
     }
     private Respuesta mensaje(String texto) {

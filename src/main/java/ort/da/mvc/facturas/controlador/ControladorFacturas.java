@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ort.da.mvc.fachada.Fachada;
 import ort.da.mvc.facturas.dto.FacturaDto;
 import ort.da.mvc.facturas.modelo.Factura;
 import ort.da.mvc.facturas.modelo.Respuesta;
-import ort.da.mvc.facturas.servicios.SistemaFacturas;
 
 /**
  *
@@ -33,7 +33,7 @@ public class ControladorFacturas {
     @PostMapping("/iniciarFactura")
     public List<Respuesta> iniciarFactura(@RequestParam Integer cedula) {
         if(factura==null){
-            factura = SistemaFacturas.getInstancia().nuevaFactura(cedula.toString());
+            factura = Fachada.getInstancia().nuevaFactura(cedula.toString());
             if(factura!=null){
                 return Respuesta.lista(factura());
             }return Respuesta.lista(mensaje("No se pudo iniciar la factura, verifique la cedula"));
@@ -52,7 +52,7 @@ public class ControladorFacturas {
     @PostMapping("/confirmarFactura")
     public List<Respuesta> confirmarFactura(){
         if(factura!=null){
-            if(SistemaFacturas.getInstancia().agregar(factura)){
+            if(Fachada.getInstancia().agregar(factura)){
                 int nro = factura.getNumero();
                 factura = null;  
                 return Respuesta.lista(factura(),
@@ -76,7 +76,7 @@ public class ControladorFacturas {
        return new Respuesta("factura",new FacturaDto(factura));
    }
     private Respuesta totalFacturado(){
-       return new Respuesta("totalFacturado",SistemaFacturas.getInstancia().totalFacturado());
+       return new Respuesta("totalFacturado",Fachada.getInstancia().totalFacturado());
    }
    private Respuesta mensaje(String texto) {
         return new Respuesta("mensaje",texto);

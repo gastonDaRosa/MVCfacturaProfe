@@ -12,14 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ort.da.mvc.fachada.Fachada;
 import ort.da.mvc.facturas.dto.ClienteDto;
 import ort.da.mvc.facturas.dto.ProductoDto;
 import ort.da.mvc.facturas.modelo.Cliente;
 import ort.da.mvc.facturas.modelo.Producto;
 import ort.da.mvc.facturas.modelo.Respuesta;
-import ort.da.mvc.facturas.servicios.SistemaClientes;
-import ort.da.mvc.facturas.servicios.SistemaFacturas;
-import ort.da.mvc.facturas.servicios.SistemaStock;
 
 /**
  *
@@ -32,9 +30,9 @@ public class ControladorConsultaClientesPmb {
     
     @PostMapping("/vistaConectada")
     public List<Respuesta> vistaConectada() {
-       Producto pmb = SistemaStock.getInstancia().getProductoMenorPrecio();
+       Producto pmb = Fachada.getInstancia().getProductoMenorPrecio();
        if(pmb==null) return Respuesta.lista(mensaje("No hay productos ingresados"));
-       ArrayList<Cliente> clientes = SistemaClientes.getInstancia().clientesCompraronProductoMenorPrecio();
+       ArrayList<Cliente> clientes = Fachada.getInstancia().clientesCompraronProductoMenorPrecio();
        if(clientes.isEmpty()){
            return Respuesta.lista(producto(pmb),mensaje("No hay clientes que hayan comprado el producto"));
        }
@@ -47,7 +45,7 @@ public class ControladorConsultaClientesPmb {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         for(Cliente c: clientes){
             ClienteDto dto = new ClienteDto(c);
-            Date ultimaCompra = SistemaFacturas.getInstancia().ultimaCompra(c, p).getFecha();
+            Date ultimaCompra = Fachada.getInstancia().ultimaCompra(c, p).getFecha();
             dto.setUltimaCompra(sdf.format(ultimaCompra));
             dtos.add(dto);
         }
