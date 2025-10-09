@@ -7,6 +7,7 @@ package ort.da.mvc.facturas.servicios;
 
 import java.util.ArrayList;
 
+import ort.da.mvc.fachada.Fachada;
 import ort.da.mvc.facturas.modelo.Cliente;
 import ort.da.mvc.facturas.modelo.Producto;
 
@@ -44,11 +45,11 @@ public class SistemaClientes {
        return clientesCompraronOnoProductoMenorPrecio(true);
     }
     private ArrayList clientesCompraronOnoProductoMenorPrecio(boolean compraron){
-        Producto menor = SistemaStock.getInstancia().getProductoMenorPrecio();
+        Producto menor = Fachada.getInstancia().getProductoMenorPrecio();
         ArrayList<Cliente> retorno = new ArrayList<Cliente>();
         
         for(Cliente c: clientes){
-            if ( SistemaFacturas.getInstancia().clienteComproProducto(c, menor) == compraron){
+            if ( Fachada.getInstancia().clienteComproProducto(c, menor) == compraron){
                 retorno.add(c);
             }
             

@@ -7,6 +7,7 @@ package ort.da.mvc.facturas.servicios;
 
 import java.util.ArrayList;
 
+import ort.da.mvc.fachada.Fachada;
 import ort.da.mvc.facturas.modelo.Cliente;
 import ort.da.mvc.facturas.modelo.Factura;
 import ort.da.mvc.facturas.modelo.Producto;
@@ -38,7 +39,7 @@ public class SistemaFacturas {
         return facturas;
     }
     public Factura nuevaFactura(String cedula){
-        Cliente c = SistemaClientes.getInstancia().buscarCliente(cedula);
+        Cliente c = Fachada.getInstancia().buscarCliente(cedula);
         if(c!=null){
             return new Factura(c);
         }
